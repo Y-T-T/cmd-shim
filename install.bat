@@ -42,7 +42,7 @@ echo.
 echo [3/3] Updating User Path...
 
 :: Add .local\bin to PATH if not already present
-powershell -Command "$target='%DEST_DIR%'; $current=[Environment]::GetEnvironmentVariable('Path', 'User'); if ($current -split ';' -contains $target) { Write-Host '   [INFO] .local\bin is already in your PATH.' -ForegroundColor Yellow } else { [Environment]::SetEnvironmentVariable('Path', $current + ';' + $target, 'User'); Write-Host '   [SUCCESS] Added .local\bin to User PATH.' -ForegroundColor Green }"
+powershell -Command "$target='%DEST_DIR%'; $current=[Environment]::GetEnvironmentVariable('Path', 'User'); if ($current -split ';' -contains $target) { Write-Host '   [INFO] .local\bin is already in your PATH.' -ForegroundColor Yellow } else { [Environment]::SetEnvironmentVariable('Path', $target + ';' + $current, 'User'); Write-Host '   [SUCCESS] Added .local\bin to User PATH.' -ForegroundColor Green }"
 
 echo.
 echo ==============================================
