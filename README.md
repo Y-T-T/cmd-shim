@@ -23,7 +23,7 @@ Run `install.bat` to automatically append the `bin` directory to your User Path.
 | `mv` | `move` | |
 | `cat` | `type` | |
 | `grep` | `findstr` | Supports basic regex. |
-| `sudo` | `runas` | Prompts for UAC (Admin) in current directory. |
+| `sudo` | `runas` | Prompts for UAC (Admin) in current directory. It may conflict with Windows Developer Tool (Sudo). |
 | `touch` | `type nul >` | Updates timestamp or creates empty file. |
 | `which` | `where` | |
 | `pwd` | `cd` | |
