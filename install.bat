@@ -1,14 +1,41 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
 :: =================Setup=================
-:: Source: the "bin" folder next to the current script
-set "SOURCE_DIR=%~dp0bin"
+:: Source Root: The "src" folder next to the script
+set "SRC_ROOT=%~dp0src"
 :: Destination: C:\Users\User\.local\bin
 set "DEST_BASE=%USERPROFILE%\.local"
 set "DEST_DIR=%DEST_BASE%\bin"
+
+:: Initialize Flags (0=False, 1=True)
+set "INSTALL_NET=0"
+set "INSTALL_SYS=0"
+set "INSTALL_CUS=0"
 :: =========================================
 
+:: --- 1. Argument Parsing ---
+:parse_args
+if "%~1"=="" goto :check_dest
+
+if /i "%~1"=="--net" set "INSTALL_NET=1"
+if /i "%~1"=="--sysinternals" set "INSTALL_SYS=1"
+if /i "%~1"=="--customs" set "INSTALL_CUS=1"
+if /i "%~1"=="--all" (
+    set "INSTALL_NET=1"
+    set "INSTALL_SYS=1"
+    set "INSTALL_CUS=1"
+)
+
+:: Warn on unknown arguments
+if /i not "%~1"=="--net" if /i not "%~1"=="--sysinternals" if /i not "%~1"=="--customs" if /i not "%~1"=="--all" (
+    echo [WARN] Unknown argument ignored: %~1
+)
+
+shift
+goto :parse_args
+
+:check_dest
 echo.
 echo [1/3] Checking destination directory...
 
@@ -23,19 +50,42 @@ if not exist "%DEST_DIR%" (
 echo.
 echo [2/3] Installing scripts...
 
-:: Copy files
-if exist "%SOURCE_DIR%\*.cmd" (
-    copy /Y "%SOURCE_DIR%\*.cmd" "%DEST_DIR%\" > nul
-    echo    - Installed .cmd scripts.
+:: --- 2. Install Common (Default) ---
+echo    - [Common] Installing defaults...
+if exist "%SRC_ROOT%\common\*.cmd" (
+    xcopy /Y /Q "%SRC_ROOT%\common\*.cmd" "%DEST_DIR%\" >nul
 ) else (
-    echo    [ERROR] No .cmd files found in "%SOURCE_DIR%"
-    pause
-    exit /b 1
+    echo      [WARN] No common scripts found in src\common
 )
 
-:: if there are .bat files, copy them as well
-if exist "%SOURCE_DIR%\*.bat" (
-    copy /Y "%SOURCE_DIR%\*.bat" "%DEST_DIR%\" > nul 2>&1
+:: --- 3. Install Net Modules ---
+if "%INSTALL_NET%"=="1" (
+    echo    - [Net] Installing network tools...
+    if exist "%SRC_ROOT%\net\*.cmd" (
+        xcopy /Y /Q "%SRC_ROOT%\net\*.cmd" "%DEST_DIR%\" >nul
+    ) else (
+        echo      [WARN] No scripts found in src\net
+    )
+)
+
+:: --- 4. Install Sysinternals Modules ---
+if "%INSTALL_SYS%"=="1" (
+    echo    - [Sysinternals] Installing sysinternals wrappers...
+    if exist "%SRC_ROOT%\sysinternals\*.cmd" (
+        xcopy /Y /Q "%SRC_ROOT%\sysinternals\*.cmd" "%DEST_DIR%\" >nul
+    ) else (
+        echo      [WARN] No scripts found in src\sysinternals
+    )
+)
+
+:: --- 5. Install Customs ---
+if "%INSTALL_CUS%"=="1" (
+    echo    - [Customs] Installing custom scripts...
+    if exist "%SRC_ROOT%\customs\*.cmd" (
+        xcopy /Y /Q "%SRC_ROOT%\customs\*.cmd" "%DEST_DIR%\" >nul
+    ) else (
+        echo      [WARN] No scripts found in src\customs
+    )
 )
 
 echo.
