@@ -10,4 +10,4 @@ if %errorlevel% neq 0 (
 )
 
 :: invoke strings64.exe with all passed arguments
-strings64.exe %*
+strings64.exe -accepteula -nobanner %*

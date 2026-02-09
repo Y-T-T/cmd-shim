@@ -5,4 +5,4 @@ if "%~1"=="" (
     echo Usage: less [filename]
     exit /b 1
 )
-powershell -NoProfile -Command "Get-Content '%~1' | Out-GridView -Title 'Less: %~nx1'"
+powershell -NoProfile -Command "Get-Content '%~1' | Out-GridView -Wait -Title 'Less: %~nx1'"

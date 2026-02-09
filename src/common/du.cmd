@@ -2,6 +2,13 @@
 :: Maps 'du' to PowerShell measure-object
 :: Usage: du [-h] [-s] [path]
 
+:: if systeminternal suite is installed, use du64.exe for better performance on large directories
+where du64.exe >nul 2>nul
+if %errorlevel%==0 (
+    du64.exe -nobanner -q %*
+    exit /b
+)
+
 powershell -NoProfile -Command ^
     "& { " ^
     "$target = '.'; $summary = $false; $human = $false; " ^

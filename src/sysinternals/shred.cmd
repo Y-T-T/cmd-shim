@@ -8,5 +8,4 @@ if "%~1"=="" (
 )
 
 :: -p 3: Overwrite 3 times (DOD standard)
-:: -s: Recurse subdirectories
-sdelete64.exe -p 3 -s %*
+sdelete64.exe -accepteula -nobanner -p 3 %*

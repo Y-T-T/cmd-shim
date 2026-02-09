@@ -9,7 +9,7 @@ setlocal
 ::    Simple check: if arguments contain "-i", switch to netstat
 echo %* | findstr /i "\-i" >nul
 if not errorlevel 1 (
-    echo [INFO] 'lsof -i' detected: switching to 'netstat -ano'
+    @REM echo [INFO] 'lsof -i' detected: switching to 'netstat -ano'
     
     set "FILTER="
     setlocal EnableDelayedExpansion
@@ -20,7 +20,7 @@ if not errorlevel 1 (
     )
     
     if defined FILTER (
-        echo [INFO] Filtering specifically for "!FILTER!"
+        @REM echo [INFO] Filtering specifically for "!FILTER!"
         netstat -ano | findstr "!FILTER!"
     ) else (
         endlocal
